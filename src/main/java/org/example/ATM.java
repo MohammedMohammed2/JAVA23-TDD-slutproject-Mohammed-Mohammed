@@ -13,19 +13,19 @@ public class ATM {
         this.bankInterface = bankInterface;
         this.currentUser = currentUser;
     }
-
+    //if the user is not null then it will assigns the User object to the currentUser and retun true and if the user is null it will retrun false
     public boolean insertCard(String userId) {
         User user = bankInterface.getUserById(userId);
         if (user != null) {
-            this.currentUser = user;
+            currentUser = user;
             return true;
         } else {
-            this.currentUser = null;
+            currentUser = null;
             return false;
         }
     }
 
-
+// it checks if the  card of the user is not locked and it calculate the amount of fail attempts the usre is allowed to make before locking the card
     public boolean enterPin(String pin) {
         if (currentUser != null) {
             if (currentUser.isLocked()) {
@@ -49,7 +49,7 @@ public class ATM {
         }
         return false;
     }
-
+    //checks if the user is not null and shows the user their balance
     public double checkBalance() {
         if (currentUser != null) {
             return currentUser.getBalance();
@@ -58,6 +58,7 @@ public class ATM {
             return -1;
         }
     }
+    //checks if the user is not null and deposits the money
     public void deposit(double amount) {
         if (currentUser != null) {
             currentUser.deposit(amount);
@@ -67,6 +68,7 @@ public class ATM {
         }
     }
 
+
     public boolean withdraw(double amount) {
         if (currentUser != null && currentUser.getBalance() >= amount) {
             currentUser.withdraw(amount);
@@ -75,9 +77,12 @@ public class ATM {
         return false;
     }
 
+
     public static void main(String[] args) {
         User testUser = new User("user123", "5678", 1000.0);
 
+
+        //checks if test user match the given id and if the card is locked
         BankInterface bankInterface = new BankInterface() {
             @Override
             public User getUserById(String id) {
@@ -90,17 +95,18 @@ public class ATM {
             }
         };
 
+
         ATM atm = new ATM(new Bank(), testUser, bankInterface);
 
         Scanner inputScanner = new Scanner(System.in);
 
         while (true) {
-            System.out.print("Please insert your card (Enter user ID or type 'exit' to quit): ");
+            System.out.print("insert your card (Enter user ID or type exit to quit the application): ");
             String userId = inputScanner.nextLine();
             if (userId.equalsIgnoreCase("exit")) {
                 break;
             }
-
+            //passes the id through insert card and check if the pin is entered
             if (atm.insertCard(userId)) {
                 boolean pinValidated = false;
                 while (!pinValidated) {
@@ -108,7 +114,7 @@ public class ATM {
                     String pin = inputScanner.nextLine();
                     pinValidated = atm.enterPin(pin);
                 }
-
+                //login menu
                 while (true) {
                     System.out.println("Select an option: 1-Withdraw || 2-Deposit || 3-Check Balance || 4- Exit");
                     int choice = inputScanner.nextInt();

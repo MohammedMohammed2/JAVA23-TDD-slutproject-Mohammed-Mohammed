@@ -142,7 +142,7 @@ class ATMTest {
 
         String output = outContent.toString();
 
-        assertTrue(output.contains("Please insert your card (Enter user ID or type 'exit' to quit):"));
+        assertTrue(output.contains("insert your card (Enter user ID or type exit to quit the application):"));
         assertTrue(output.contains("Enter your PIN:"));
         assertTrue(output.contains("PIN accepted. Access granted."));
         assertTrue(output.contains("Select an option: 1-Withdraw || 2-Deposit || 3-Check Balance || 4- Exit"));
