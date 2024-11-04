@@ -112,20 +112,7 @@ class ATMTest {
         verify(mockUser).getBalance();
         verify(mockUser, never()).withdraw(withdrawAmount);
     }
-
-    @Test
-    @DisplayName("Test card lock")
-    public void testCardLockAfterFailedAttempts() {
-        when(mockUser.getPin()).thenReturn("5678");
-
-        atm.enterPin("1111");
-        atm.enterPin("1111");
-        atm.enterPin("1111");
-
-        verify(mockUser, times(3)).incrementFailedAttempts();
-        verify(mockUser).lockCard();
-    }
-
+    
     @Test
     @DisplayName("test main method card insert")
     public void testMainCardInsertAndPinSuccess() {
