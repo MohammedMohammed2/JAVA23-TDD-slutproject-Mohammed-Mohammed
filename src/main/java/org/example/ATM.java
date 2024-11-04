@@ -148,6 +148,5 @@ public class ATM {
                 System.out.println("Invalid card or access denied.");
             }
         }
-        inputScanner.close();
     }
 }

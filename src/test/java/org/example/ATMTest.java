@@ -102,6 +102,21 @@ class ATMTest {
     }
 
     @Test
+    @DisplayName("Test withdrawal of exact balance amount")
+    public void testWithdrawExactBalanceAmount() {
+        double initialBalance = 1200.0;
+        double withdrawAmount = initialBalance;
+
+        when(mockUser.getBalance()).thenReturn(initialBalance);
+
+        boolean result = atm.withdraw(withdrawAmount);
+
+        assertTrue(result, "The withdrawal should succeed when withdrawing the exact balance.");
+        verify(mockUser).getBalance();
+        verify(mockUser).withdraw(withdrawAmount);
+    }
+
+    @Test
     @DisplayName("test when trying to withdraw money outside the range of money owned ")
     public void testWithdrawAboveTheAmountOwned() {
         double withdrawAmount = 1500.0;
@@ -160,5 +175,34 @@ class ATMTest {
 
         assertTrue(output.contains("Deposit successful. New balance: 1500.0"));
         assertTrue(output.contains("Exiting."));
+    }
+    @Test
+    @DisplayName("Test card locking after three failed PIN attempts")
+    void testCardLockAfterThreeFailedPinAttempts() {
+        when(mockUser.getId()).thenReturn("user123");
+        when(mockUser.getPin()).thenReturn("5678");
+        when(mockUser.isLocked()).thenReturn(false);
+
+        when(mockBankInterface.getUserById("user123")).thenReturn(mockUser);
+        when(mockUser.isLocked()).thenReturn(false);
+
+        when(mockUser.getFailedAttempts())
+                .thenReturn(1)
+                .thenReturn(2)
+                .thenReturn(3);
+
+        atm.enterPin("0000");
+        verify(mockUser).incrementFailedAttempts();
+
+        atm.enterPin("1111");
+        verify(mockUser, times(2)).incrementFailedAttempts();
+
+        atm.enterPin("2222");
+        verify(mockUser, times(3)).incrementFailedAttempts();
+        verify(mockUser).lockCard();
+
+        when(mockUser.isLocked()).thenReturn(true);
+        boolean result = atm.enterPin("5678");
+        assertFalse(result, "After three failed attempts, the card should be locked and access denied.");
     }
 }
