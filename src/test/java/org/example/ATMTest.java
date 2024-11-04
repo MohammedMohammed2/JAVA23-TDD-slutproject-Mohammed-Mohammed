@@ -14,23 +14,23 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 class ATMTest {
-        private Bank mockBank;
-        private User mockUser;
-        private BankInterface mockBankInterface;
-        private ATM atm;
+    private Bank mockBank;
+    private User mockUser;
+    private BankInterface mockBankInterface;
+    private ATM atm;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
-        @BeforeEach
-        public void setUp() {
+    @BeforeEach
+    public void setUp() {
         mockBank = mock(Bank.class);
         mockUser = mock(User.class);
         mockBankInterface = mock(BankInterface.class);
         atm = new ATM(mockBank, mockUser, mockBankInterface);
     }
 
-        @Test
-        @DisplayName("test when teh user exist")
-        public void testUserFound() {
+    @Test
+    @DisplayName("test when teh user exist")
+    public void testUserFound() {
         String userId = "user456";
         when(mockBankInterface.getUserById(userId)).thenReturn(mockUser);
         boolean result = atm.insertCard(userId);
@@ -38,9 +38,9 @@ class ATMTest {
         verify(mockBankInterface).getUserById(userId);
     }
 
-        @Test
-        @DisplayName("test when the user dosent exist")
-        public void testUserNotFound() {
+    @Test
+    @DisplayName("test when the user dosent exist")
+    public void testUserNotFound() {
         String userId = "user456";
         when(mockBankInterface.getUserById(userId)).thenReturn(null);
         boolean result = atm.insertCard(userId);
@@ -48,9 +48,9 @@ class ATMTest {
         verify(mockBankInterface).getUserById(userId);
     }
 
-        @Test
-        @DisplayName("test when the pin code is entered correctly")
-        public void testEnterCorrectPin() {
+    @Test
+    @DisplayName("test when the pin code is entered correctly")
+    public void testEnterCorrectPin() {
         String correctPin = "5678";
         when(mockUser.getPin()).thenReturn(correctPin);
         boolean result = atm.enterPin(correctPin);
@@ -59,9 +59,9 @@ class ATMTest {
         verify(mockUser).resetFailedAttempts();
     }
 
-        @Test
-        @DisplayName("test whenthe pin entered is incorrect")
-        public void testEnterIncorrectPin() {
+    @Test
+    @DisplayName("test whenthe pin entered is incorrect")
+    public void testEnterIncorrectPin() {
         String correctPin = "5678";
         String incorrectPin = "8765";
         when(mockUser.getPin()).thenReturn(correctPin);
@@ -71,9 +71,9 @@ class ATMTest {
         verify(mockUser).incrementFailedAttempts();
     }
 
-        @Test
-        @DisplayName("test check balance")
-        public void testCheckBalance() {
+    @Test
+    @DisplayName("test check balance")
+    public void testCheckBalance() {
         double balance = 1000.0;
         when(mockUser.getBalance()).thenReturn(balance);
         double result = atm.checkBalance();
@@ -81,17 +81,17 @@ class ATMTest {
         verify(mockUser).getBalance();
     }
 
-        @Test
-        @DisplayName("test deposit")
-        public void testDeposit() {
+    @Test
+    @DisplayName("test deposit")
+    public void testDeposit() {
         double depositAmount = 300.0;
         atm.deposit(depositAmount);
         verify(mockUser).deposit(depositAmount);
     }
 
-        @Test
-        @DisplayName("test when trying to withdraw money within  the range of mooney owned")
-        public void testWithdrawWithinTheRangeOfAmountOwned() {
+    @Test
+    @DisplayName("test when trying to withdraw money within  the range of mooney owned")
+    public void testWithdrawWithinTheRangeOfAmountOwned() {
         double withdrawAmount = 200.0;
         double initialBalance = 1200.0;
         when(mockUser.getBalance()).thenReturn(initialBalance);
@@ -101,9 +101,9 @@ class ATMTest {
         verify(mockUser).withdraw(withdrawAmount);
     }
 
-        @Test
-        @DisplayName("test when trying to withdraw money outside the range of money owned ")
-        public void testWithdrawAboveTheAmountOwned() {
+    @Test
+    @DisplayName("test when trying to withdraw money outside the range of money owned ")
+    public void testWithdrawAboveTheAmountOwned() {
         double withdrawAmount = 1500.0;
         double initialBalance = 1000.0;
         when(mockUser.getBalance()).thenReturn(initialBalance);
@@ -112,7 +112,7 @@ class ATMTest {
         verify(mockUser).getBalance();
         verify(mockUser, never()).withdraw(withdrawAmount);
     }
-    
+
     @Test
     @DisplayName("test main method card insert")
     public void testMainCardInsertAndPinSuccess() {
