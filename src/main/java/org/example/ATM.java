@@ -7,6 +7,8 @@ public class ATM {
     private User currentUser;
     private BankInterface bankInterface;
 
+    private int numberOftries = 3;
+
     //constructor to initialize
     public ATM(Bank bank, User currentUser, BankInterface bankInterface) {
         this.bank = bank;
@@ -39,7 +41,8 @@ public class ATM {
                 return true;
             } else {
                 currentUser.incrementFailedAttempts();
-                System.out.println("Card locked after 3 failed attempts.");
+                numberOftries--;
+                System.out.println("Card locked after "+ numberOftries +" failed attempts.");
                 if (currentUser.getFailedAttempts() == 3) {
                     currentUser.lockCard();
                     return false;
