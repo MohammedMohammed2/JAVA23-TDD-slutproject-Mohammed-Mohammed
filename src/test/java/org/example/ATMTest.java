@@ -39,6 +39,14 @@ class ATMTest {
     }
 
     @Test
+    @DisplayName("Test correct bank name")
+    void testGetBankName() {
+        String expectedBankName = "Nordia";
+        String bankName = atm.getBankName();
+        assertEquals(expectedBankName, bankName, "The bank name should match the expected bank name.");
+    }
+
+    @Test
     @DisplayName("test when the user dosent exist")
     public void testUserNotFound() {
         String userId = "user456";
@@ -176,6 +184,7 @@ class ATMTest {
         assertTrue(output.contains("Deposit successful. New balance: 1500.0"));
         assertTrue(output.contains("Exiting."));
     }
+
     @Test
     @DisplayName("Test card locking after three failed PIN attempts")
     void testCardLockAfterThreeFailedPinAttempts() {

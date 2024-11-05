@@ -79,6 +79,10 @@ public class ATM {
         }
         return false;
     }
+    //getting the bank name
+    public String getBankName() {
+        return Bank.getBankName();
+    }
 
 
     public static void main(String[] args) {
@@ -119,6 +123,7 @@ public class ATM {
                 }
                 //login menu
                 while (true) {
+                    System.out.println("welcome to " + atm.getBankName());
                     System.out.println("Select an option: 1-Withdraw || 2-Deposit || 3-Check Balance || 4- Exit");
                     int choice = inputScanner.nextInt();
                     inputScanner.nextLine();
